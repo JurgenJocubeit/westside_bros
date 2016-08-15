@@ -1,6 +1,6 @@
 # Westside Brothers CSV Sample Data Generator
 
-This script was created to automatically generate CSV files with sane test data for the Westside Brothers MySQL database in the Australian Institute of ICT's Diploma of Website Development (ICT50615) Build a database (ICTDBS412) module (Assessment 2).
+This ruby script was created to automatically generate CSV files with sane test data for the Westside Brothers MySQL database in the Australian Institute of ICT's Diploma of Website Development (ICT50615) Build a database (ICTDBS412) module (Assessment 2).
 
 The script utilizes The Movie Database API to generate a list of videos, and the Faker gem to create customers, transaction/requests and payments.
 
@@ -10,16 +10,17 @@ Westside brothers decide Kingaroy (in Queensland) needs an online video hire sho
 
 Get your own API key from [The Movie Database](https://www.themoviedb.org/account).
 
-You must register providing all your details (name, address, phone, email) and then create an application. I selected 'educational', and for the application desription provided the following:
+You must register providing all your details (name, address, phone, email) and then create an application. I selected 'educational', and for the application description provided the following:
 
-"Populate a local database for a video store with sample data from The Movie Database for educational purposes."
+> "Populate a local database for a video store with sample data from The Movie Database for educational purposes."
 
 You should have access to your API Key immediately.
 
-
 ## Installation
 
-Install the dependencies:
+You should be familiar with ruby and have it installed along with rubygems in order to make use of this script.
+
+Install the prerequisite dependencies:
 
 ```bash
 gem install activesupport
@@ -27,7 +28,7 @@ gem install faker
 gem install themoviedb-api
 ```
 
-The sample generator script will look for your API key in the `TMDB_API_KEY` environment variable:
+The CSV generator script will look for your API key in the `TMDB_API_KEY` environment variable:
 
 ```bash
 export TMDB_API_KEY=xxxxxxxxxxxxxxxxxxx
@@ -50,7 +51,7 @@ Developed with ruby 2.3.1p112 (2016-04-26 revision 54768) [x86_64-darwin15] usin
 
 ## How To Use
 
-Clone the repo from GitHub, and run the `generate` ruby script:
+Clone the repository from GitHub, and run the `generate` ruby script:
 
 ```
 git clone https://github.com/JurgenJocubeit/westside_bros .
@@ -94,7 +95,7 @@ Added 10 Payments (payment.csv)
 
 The script will download 20 titles for each genre, but only movies with 10 or more votes are included.
 
-The script will de-duplicate the movies based on their id, as a movie can appear in several genres.
+The script will de-duplicate the movies based on their id, because a movie can appear in several genres. When I ran this script I started with 240 titles, but this were reduced to 177 when the duplicates were removed.
 
 Field | Data Type | Comment
 --- | --- | ---
