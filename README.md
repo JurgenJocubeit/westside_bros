@@ -119,6 +119,7 @@ First Name | String |
 Last Name | String |
 Street Address | String |
 Suburb | String | Random from Kingaroy, Gordonbrook, Taabinga, Coolabunia or Booie
+City | String | Intentionally left blank
 State | String | Always Queensland
 Postcode | Integer | Always 4610
 Contact Number | Integer | Random telephone number relative to Kingaroy
