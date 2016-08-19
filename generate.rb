@@ -71,18 +71,33 @@ GENRES.each do |genre|
     { video_id: movie.id,
       title: movie.title,
       description: movie.overview,
+      artist_name: Faker::Name.name,
+      producer_name: Faker::Name.name,
       year_released: Date.parse(movie.release_date).year,
       price: Random.new.rand(1..12),
-      quantity: Random.new.rand(1..50),
+      total_bluray: Random.new.rand(1..25),
+      total_dvd: Random.new.rand(1..25),
+      bluray_on_hand: 0,
+      dvd_on_hand: 0,
       genre: genre[:wsb],
       classification: CLASSIFICATIONS.sample
     }
   end
 end
 
-# De-dupe the array so only unique videos in each genre
+# Reduce down to a single array of hashes
 videos.flatten!
+
+# De-dupe the array so only unique videos in each genre
 videos.uniq! { |video| video[:video_id] }
+
+# Add the stock on hand quantities
+videos.each do |video|
+  video.merge!({
+    bluray_on_hand: video[:total_bluray] - Random.new.rand(1..4),
+    dvd_on_hand: video[:total_dvd] - Random.new.rand(1..4)
+  })
+end
 
 # Reassign video_id with sequential index
 videos.each_with_index do |video, index|
@@ -98,7 +113,6 @@ end
     last_name: Faker::Name.last_name,
     street_address: Faker::Address.street_address,
     suburb: SUBURBS.sample,
-    city: nil,
     state: QUEENSLAND,
     postcode: POSTCODE,
     contact_number: "7#{PHONE_NUMBERS.sample}#{"%04d" % Random.new.rand(1..9999)}".to_i,
@@ -118,6 +132,9 @@ customer_samples = customers.sample(10)
   payment = {
     payment_id: index + 1,
     payment_method: PAYMENT_METHODS.sample,
+    hire_amount: video_samples[index][:price] * 0.9,
+    shipping_amount: 0,
+    tax_amount: video_samples[index][:price] * 0.1,
     payment_amount: video_samples[index][:price],
     date_paid: date
   }
@@ -128,6 +145,8 @@ customer_samples = customers.sample(10)
     payment_id: payment[:payment_id],
     date_rented: date,
     date_due: date + 7.days,
+    date_dispatched: date,
+    date_returned: date + 7.days,
     pick_up_delivery: PICK_UP_DELIVERY.sample,
     transaction_note: Faker::Hipster.sentence
   }
@@ -154,9 +173,14 @@ file = CSV.open(VIDEO_CSV_FILE, "w") do |csv|
     csv << [ video[:video_id],
              video[:title],
              video[:description],
+             video[:artist_name],
+             video[:producer_name],
              video[:year_released],
              video[:price],
-             video[:quantity],
+             video[:total_bluray],
+             video[:total_dvd],
+             video[:bluray_on_hand],
+             video[:dvd_on_hand],
              video[:genre],
              video[:classification]
            ]
@@ -179,7 +203,6 @@ file = CSV.open(CUSTOMER_CSV_FILE, "w") do |csv|
              customer[:last_name],
              customer[:street_address],
              customer[:suburb],
-             customer[:city],
              customer[:state],
              customer[:postcode],
              customer[:contact_number],
@@ -202,6 +225,9 @@ file = CSV.open(PAYMENT_CSV_FILE, "w") do |csv|
   payments.each do |payment|
     csv << [ payment[:payment_id],
              payment[:payment_method],
+             payment[:hire_amount],
+             payment[:shipping_amount],
+             payment[:tax_amount],
              payment[:payment_amount],
              payment[:date_paid]
            ]
@@ -224,6 +250,8 @@ file = CSV.open(TRANSACTION_CSV_FILE, "w") do |csv|
              transaction[:payment_id],
              transaction[:date_rented],
              transaction[:date_due],
+             transaction[:date_dispatched],
+             transaction[:date_returned],
              transaction[:pick_up_delivery],
              transaction[:transaction_note]
            ]
