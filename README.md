@@ -102,9 +102,14 @@ Field | Data Type | Comment
 Video ID | Integer | Primary key
 Title | String | Title from The Movie Database API for this movie
 Description | String | Overview from The Movie Database API for this movie
+Artist Name | String | Random name from Faker::Name
+Producer Name | String | Random name from Faker::Name
 Year Released | Integer | 4 digit year e.g. 2016  from The Movie Database API for this movie
 Price | Integer | Random number between 1 and 12
-Quantity | Integer | Random number between 1 and 50
+Total Bluray | TinyInt | Random number between 1 and 25
+Total DVD | TinyInt | Random number between 1 and 25
+Bluray On Hand | TinyInt | Random number between 1 and 4
+DVD On Hand | TinyInt | Random number between 1 and 4
 Genre | String | Random from Action, Adventure, Comedy, Crime, Drama, Epics, Fantasy, Horror, Musical, Sci-Fi, War or Westerns
 Classification | String | Random from G, PG, M, MA15+ or R18+
 
@@ -119,7 +124,6 @@ First Name | String |
 Last Name | String |
 Street Address | String |
 Suburb | String | Random from Kingaroy, Gordonbrook, Taabinga, Coolabunia or Booie
-City | String | Intentionally left blank
 State | String | Always Queensland
 Postcode | Integer | Always 4610
 Contact Number | Integer | Random telephone number relative to Kingaroy
@@ -134,7 +138,10 @@ Field | Data Type | Comment
 --- | --- | ---
 Payment ID | Integer | Primary key
 Payment Method | String | Random from Cash, EFTPOS or Credit Card
-Payment Amount | Integer | Matches Video Price from sample of 10 videos
+Hire Amount | Decimal (5,2) | 90% of Video Price from sample of 10 videos
+Shipping Amount | Decimal (5,2) | Defaults to 0.00
+Tax Amount | Decimal (5,2) | 10% of Video Price from sample of 10 videos
+Payment Amount | Integer | Matches (100%) Video Price from sample of 10 videos
 Date Paid | Date | Random date after Customer Date Joined using the format YYYY-MM-DD
 
 ### transaction.csv
@@ -148,6 +155,8 @@ Customer ID | Integer | Foreign key, matches Customer ID from sample of 10 custo
 Payment ID | Integer | Foreign key
 Date Rented | Date | Matches Payment Date Paid (from above) using the format YYYY-MM-DD
 Date Due | Date | 7 days after Date Rented (above) using the format YYYY-MM-DD
+Date Dispatched | Date | Defaults to Date Rented above
+Date Returned | Date | Defaults to Date Due above
 Pick Up Delivery | String | Random from 'pick-up' or 'delivery'
 Transaction Note | String | Random sentence from Faker::Hipster.sentence
 
